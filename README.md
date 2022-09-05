@@ -24,7 +24,7 @@ Instale utilizando um dos comandos abaixo:
 - `pip3 install -r requirements.txt`
 
 ## Uso 
-Para a utilização correta, entre no notebook com o comando 
+Para a utilização correta, rode com
 `python3 src/main.py`
 
 
