@@ -68,3 +68,40 @@ def genetic_algorithm(neural_nets: List, x, y) -> GenReturn:
                 neural_nets.append(tmp)
     log_file.close()
     return (best_weights, output_layer_weights)
+
+if __name__ == '__main__':
+    df = pd.read_csv('dataset.csv')
+    y = []
+
+    x_train, x_test, y_train, y_test = init_and_split_dataset(df=df)
+
+    nns = initiate_neural_nets(x_train=x_train, y_train=y_train)
+    (best_weights, output_layer_weights) = genetic_algorithm(
+        neural_nets=nns, x=x_train, y=y_train)
+
+    gnn = GeneticNeuralNet(is_child=True, hidden_layer_weights=best_weights,
+                           output_weights=output_layer_weights, epochs=20,
+                           x_train=x_train, y_train=y_train)
+    gnn.train()
+    acc = gnn.accuracy(x_test, y_test)
+
+    model = tf.keras.models.Sequential()
+    model.add(tf.keras.layers.Dense(4, activation='relu'))
+    model.add(tf.keras.layers.Dense(8, activation='relu'))
+    model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+
+    model.compile(optimizer='adam', loss='binary_crossentropy',
+                  metrics=['accuracy'])
+
+    model.fit(x_train.values, y_train.values, epochs=10)
+    y_hat = model.predict(x_test.values)
+    nn_acc = accuracy_score(y_test.values, y_hat.round())
+
+    print(f'GNN acc: {acc}')
+    print(f'Normal NN acc: {nn_acc}')
+
+    for idx, line in enumerate(open('log_file.txt', 'r')):
+        y.append(float(line))
+    plt.title("Value")
+    plt.plot(y)
+    plt.show()
