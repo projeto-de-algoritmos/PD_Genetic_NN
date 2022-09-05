@@ -10,23 +10,22 @@
 | 19/0026600  |  Davi Marinho da Silva Campos |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+O projeto utiliza do conceito de algoritmos genéticos para criar uma rede neural com um melhor set de pesos iniciais. Com isso, ao invés de inicializar a rede neural randomicamente, os pesos são definidos de uma maneira que o resultado final seja melhor, com base em um treshold selecionado pelo programa.
 
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
 ## Instalação 
-**Linguagem**: Python<br> e Jupyter<br>
-**Framework**: Pandas<br> e Numpy<br> 
-Para rodar o projeto é necessário possuir Python, Jupyter, Pandas e Numpy.
+**Linguagem**: Python<br>
+**Framework**: Tensorflow<br> 
+Para rodar o projeto é necessário possuir Python, Tensorflow, Scikit-learn, Matplotlib, Pandas e Numpy.
 Instale utilizando um dos comandos abaixo:
 - `pip install -r requirements.txt`
 - `pip3 install -r requirements.txt`
 
 ## Uso 
 Para a utilização correta, entre no notebook com o comando 
-`jupyter-notebook decision_tree.ipynb`
-e rode as células do notebook.
+`python3 src/main.py`
 
 
 

@@ -24,15 +24,17 @@ def initiate_neural_nets(x_train, y_train, initial_population: int = 20) -> List
 
     return neural_nets
 
+
 def genetic_algorithm(neural_nets: List, x, y) -> GenReturn:
     fitness = 0
     best_weights = []
     output_layer_weights = []
     computed_nns = []
     gen = 0
+    last_gen_updated = 0
     log_file = open('log_file.txt', 'w')
 
-    while fitness < .85:
+    while fitness < .8:
         print(f"Generation {gen}")
         gen += 1
         for idx, neural_net in enumerate(neural_nets):
@@ -48,6 +50,7 @@ def genetic_algorithm(neural_nets: List, x, y) -> GenReturn:
 
         for i in range(0, len(computed_nns)):
             if computed_nns[i].fitness_value > fitness:
+                last_gen_updated = gen
                 fitness = computed_nns[i].fitness_value
                 print(f"Gen {gen}")
                 print(f"Max fitness value -> {fitness}")
@@ -58,16 +61,18 @@ def genetic_algorithm(neural_nets: List, x, y) -> GenReturn:
                         best_weights.append(layer.get_weights()[0])
                     else:
                         output_layer_weights.append(layer.get_weights()[0])
-
+        if last_gen_updated + 20 == gen:
+            break
         for i in range(0, 3):
             for _ in range(0, 2):
-                tmp = crossover(computed_nns[i], 
-                                choice(computed_nns), 
-                                x_train=x, 
+                tmp = crossover(computed_nns[i],
+                                choice(computed_nns),
+                                x_train=x,
                                 y_train=y)
                 neural_nets.append(tmp)
     log_file.close()
     return (best_weights, output_layer_weights)
+
 
 if __name__ == '__main__':
     df = pd.read_csv('dataset.csv')
@@ -93,7 +98,7 @@ if __name__ == '__main__':
     model.compile(optimizer='adam', loss='binary_crossentropy',
                   metrics=['accuracy'])
 
-    model.fit(x_train.values, y_train.values, epochs=10)
+    model.fit(x_train.values, y_train.values, epochs=10, verbose=0)
     y_hat = model.predict(x_test.values)
     nn_acc = accuracy_score(y_test.values, y_hat.round())
 
